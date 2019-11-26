@@ -1,6 +1,7 @@
 package com.assignment.draughtsgame.utils;
 
 public class DraughtsPiece {
+    boolean crowned;
     boolean captured;
     boolean dark;
     DraughtsPosition position = new DraughtsPosition();
@@ -18,29 +19,45 @@ public class DraughtsPiece {
 
     public String toString() {
         String str;
+        if (!this.crowned) {
             if (!this.dark) {
                 str = "w";
             } else {
                 str = "b";
             }
+        } else {
+            if (!this.dark) {
+                str = "W";
+            } else {
+                str = "B";
+            }
+        }
         return str;
 
     }
 
     public DraughtsPiece() {
-        captured=false;
+        crowned = false;
+        captured = false;
         dark = false;
         position.row = 0;
         position.col = 0;
     }
 
     void piece_print() {
-
+        if (!this.crowned) {
             if (!this.dark) {
                 System.out.print("w");
             } else {
                 System.out.print("b");
             }
+        } else {
+            if (!this.dark) {
+                System.out.print("W");
+            } else {
+                System.out.print("B");
+            }
+        }
     }
 
     DraughtsPosition[]
@@ -50,8 +67,12 @@ public class DraughtsPiece {
         // cp.dark = false;
         DraughtsPosition[] v_out_pos = new DraughtsPosition[0];
         boolean dark = this.dark;
+        boolean crowned = this.crowned;
         boolean pass = false;
 
+        if (crowned) {
+            pass = true;
+        } else {
             if (dir == 0 && dark) {
                 pass = true;
             } else if (dir == 1 && dark) {
@@ -60,6 +81,7 @@ public class DraughtsPiece {
                 pass = true;
             } else if (dir == 3 && !dark) {
                 pass = true;
+            }
         }
 
         if (pass) {

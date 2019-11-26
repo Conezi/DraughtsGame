@@ -164,6 +164,7 @@ public class DraughtsBoard {
                             dark_pieces[k] = none_piece;
                             dark_pieces[k].position.row = -1;
                             dark_pieces[k].position.col = -1;
+                            dark_pieces[k].captured = true;
                         }
                     }
                     for (int k = 0; k < 12; k ++) {
@@ -175,6 +176,7 @@ public class DraughtsBoard {
                             light_pieces[k] = none_piece;
                             light_pieces[k].position.row = -1;
                             light_pieces[k].position.col = -1;
+                            light_pieces[k].captured = true;
                         }
                     }
                 } else if (dir == 1) {
@@ -186,6 +188,7 @@ public class DraughtsBoard {
                             dark_pieces[k] = none_piece;
                             dark_pieces[k].position.row = -1;
                             dark_pieces[k].position.col = -1;
+                            dark_pieces[k].captured = true;
                         }
                     }
                     for (int k = 0; k < 12; k ++) {
@@ -196,6 +199,7 @@ public class DraughtsBoard {
                             light_pieces[k] = none_piece;
                             light_pieces[k].position.row = -1;
                             light_pieces[k].position.col = -1;
+                            light_pieces[k].captured = true;
                         }
                     }
                 } else if (dir == 2) {
@@ -207,6 +211,7 @@ public class DraughtsBoard {
                             dark_pieces[k] = none_piece;
                             dark_pieces[k].position.row = -1;
                             dark_pieces[k].position.col = -1;
+                            dark_pieces[k].captured = true;
                         }
                     }
                     for (int k = 0; k < 12; k ++) {
@@ -217,6 +222,7 @@ public class DraughtsBoard {
                             light_pieces[k] = none_piece;
                             light_pieces[k].position.row = -1;
                             light_pieces[k].position.col = -1;
+                            light_pieces[k].captured = true;
                         }
                     }
                 } else {
@@ -228,6 +234,7 @@ public class DraughtsBoard {
                             dark_pieces[k] = none_piece;
                             dark_pieces[k].position.row = -1;
                             dark_pieces[k].position.col = -1;
+                            dark_pieces[k].captured = true;
                         }
                     }
                     for (int k = 0; k < 12; k ++) {
@@ -238,6 +245,7 @@ public class DraughtsBoard {
                             light_pieces[k] = none_piece;
                             light_pieces[k].position.row = -1;
                             light_pieces[k].position.col = -1;
+                            light_pieces[k].captured = true;
                         }
                     }
                 }
@@ -274,6 +282,9 @@ public class DraughtsBoard {
             if (r_old == dark_pieces[k].position.row && c_old == dark_pieces[k].position.col) {
                 dark_pieces[k].position.row = r_new;
                 dark_pieces[k].position.col = c_new;
+                if (r_new == 0) {
+                    dark_pieces[k].crowned = true;
+                }
             }
         }
 
@@ -281,8 +292,37 @@ public class DraughtsBoard {
             if (r_old == light_pieces[k].position.row && c_old == light_pieces[k].position.col) {
                 light_pieces[k].position.row = r_new;
                 light_pieces[k].position.col = c_new;
+                if (r_new == 7) {
+                    light_pieces[k].crowned = true;
+                }
             }
         }
+    }
+
+    public int winner() {
+        int count_dark_dead = 0;
+        int count_light_dead = 0;
+        int win = 0;
+        for (DraughtsPiece x : dark_pieces) {
+            if (x.position.row == -1 || x.captured ||
+                    x.position.col == -1) {
+                count_dark_dead++;
+            }
+        }
+        for (DraughtsPiece x : light_pieces) {
+            if (x.position.row == -1 || x.captured ||
+                    x.position.col == -1) {
+                count_light_dead++;
+            }
+        }
+        if (count_dark_dead == 12) {
+            win = 2;
+        }
+        if (count_light_dead == 12) {
+            win = 1;
+        }
+
+        return win;
     }
 
     private int validate(DraughtsMove dm) {
@@ -291,6 +331,11 @@ public class DraughtsBoard {
         int rn = dm.simple_moves[0].end.row;
         int cn = dm.simple_moves[0].end.col;
         boolean cull = (board_get_piece_at(ro, co)).dark;
+
+
+        if (winner() != 0) {
+            return 1;
+        }
 
         int junk = 0;
         if (!cull && turn == 1) {
@@ -419,6 +464,17 @@ public class DraughtsBoard {
 
         DraughtsPosition[] pp = p.piece_positions_in_direction(dir);
         int t = 0;
+        if (!p.crowned) {
+            if (!cull) {
+                if (dir == 0 || dir == 1) {
+                    return 6;
+                }
+            } else {
+                if (dir == 2 || dir == 3) {
+                    return 6;
+                }
+            }
+        }
         for (DraughtsPosition x : pp) {
             if (x.row == rn && x.col == cn) {
                 t = 1;
