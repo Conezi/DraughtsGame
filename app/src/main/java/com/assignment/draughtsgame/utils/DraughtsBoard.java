@@ -6,6 +6,8 @@ public class DraughtsBoard {
     private DraughtsPiece[] light_pieces = new DraughtsPiece[12];
     private DraughtsPiece[] dark_pieces = new DraughtsPiece[12];
     private DraughtsPiece none_piece = new DraughtsPiece();
+    private int playerOnePieceCount=12;
+    private int playerTwoPieceCount=12;
     private int index;
     public int turn;
     public boolean playAgain=false;
@@ -160,7 +162,11 @@ public class DraughtsBoard {
                         if (rn + 1 == dark_pieces[k].position.row && cn - 1 == dark_pieces[k].position.col
                                 && dark_pieces[k].dark != cul) {
                             playAgain=(doubleMove(dark_pieces,rn-1, cn+1, rn-2, cn+2 )||
-                                    doubleMove(dark_pieces,rn-1, cn-1, rn-2, cn-2 ));
+                                    doubleMove(dark_pieces,rn-1, cn-1, rn-2, cn-2 ))||
+                                    (board_get_piece_at(rn+2, cn-2).crowned&&(
+                                            doubleMove(dark_pieces,rn-1, cn+1, rn-2, cn+2 )||
+                                                    doubleMove(dark_pieces,rn-1, cn-1, rn-2, cn-2 )||
+                                                    doubleMove(dark_pieces, rn+1, cn+1, rn+2, cn+2)));
                             dark_pieces[k] = none_piece;
                             dark_pieces[k].position.row = -1;
                             dark_pieces[k].position.col = -1;
@@ -171,7 +177,11 @@ public class DraughtsBoard {
                         if (rn + 1 == light_pieces[k].position.row && cn - 1 == light_pieces[k].position.col
                                 && light_pieces[k].dark != cul) {
                             playAgain=(doubleMove(light_pieces,rn-1, cn+1, rn-2, cn+2 )||
-                                    doubleMove(light_pieces,rn-1, cn-1, rn-2, cn-2 ));
+                                    doubleMove(light_pieces,rn-1, cn-1, rn-2, cn-2 ))||
+                                    (board_get_piece_at(rn+2, cn-2).crowned&&(
+                                            doubleMove(light_pieces, rn+1, cn+1, rn+2, cn+2)||
+                                                    doubleMove(light_pieces,rn-1, cn+1, rn-2, cn+2 )||
+                                                    doubleMove(light_pieces,rn-1, cn-1, rn-2, cn-2 )));
 
                             light_pieces[k] = none_piece;
                             light_pieces[k].position.row = -1;
@@ -184,7 +194,11 @@ public class DraughtsBoard {
                         if (rn + 1 == dark_pieces[k].position.row && cn + 1 == dark_pieces[k].position.col
                                 && dark_pieces[k].dark != cul) {
                             playAgain=doubleMove(dark_pieces, rn-1, cn-1, rn-2, cn-2)||
-                                    doubleMove(dark_pieces,rn-1, cn+1, rn-2, cn+2 );
+                                    doubleMove(dark_pieces,rn-1, cn+1, rn-2, cn+2 )||
+                                    (board_get_piece_at(rn+2, cn+2).crowned&&(
+                                            doubleMove(dark_pieces,rn-1, cn+1, rn-2, cn+2 )||
+                                                    doubleMove(dark_pieces,rn-1, cn-1, rn-2, cn-2 )||
+                                                    doubleMove(dark_pieces, rn+1, cn-1, rn+2, cn-2)));
                             dark_pieces[k] = none_piece;
                             dark_pieces[k].position.row = -1;
                             dark_pieces[k].position.col = -1;
@@ -195,7 +209,11 @@ public class DraughtsBoard {
                         if (rn + 1 == light_pieces[k].position.row && cn + 1 == light_pieces[k].position.col
                                 && light_pieces[k].dark != cul) {
                             playAgain=(doubleMove(light_pieces, rn-1, cn-1, rn-2, cn-2)||
-                                    doubleMove(light_pieces,rn-1, cn+1, rn-2, cn+2 ));
+                                    doubleMove(light_pieces,rn-1, cn+1, rn-2, cn+2 ))||
+                                    (board_get_piece_at(rn+2, cn+2).crowned&&(
+                                            doubleMove(light_pieces, rn+1, cn-1, rn+2, cn-2)||
+                                                    doubleMove(light_pieces,rn-1, cn+1, rn-2, cn+2 )||
+                                                    doubleMove(light_pieces,rn-1, cn-1, rn-2, cn-2 )));
                             light_pieces[k] = none_piece;
                             light_pieces[k].position.row = -1;
                             light_pieces[k].position.col = -1;
@@ -207,7 +225,11 @@ public class DraughtsBoard {
                         if (rn - 1 == dark_pieces[k].position.row && cn + 1 == dark_pieces[k].position.col
                                 && dark_pieces[k].dark != cul) {
                             playAgain=doubleMove(dark_pieces, rn+1, cn-1, rn+2, cn-2)||
-                                    doubleMove(dark_pieces, rn+1, cn+1, rn+2, cn+2);
+                                    doubleMove(dark_pieces, rn+1, cn+1, rn+2, cn+2)||
+                                    (board_get_piece_at(rn-2, cn+2).crowned&&(
+                                            doubleMove(dark_pieces,rn-1, cn-1, rn-2, cn-2 )||
+                                                    doubleMove(dark_pieces, rn+1, cn+1, rn+2, cn+2)||
+                                                    doubleMove(dark_pieces, rn+1, cn-1, rn+2, cn-2)));
                             dark_pieces[k] = none_piece;
                             dark_pieces[k].position.row = -1;
                             dark_pieces[k].position.col = -1;
@@ -218,7 +240,11 @@ public class DraughtsBoard {
                         if (rn - 1 == light_pieces[k].position.row && cn + 1 == light_pieces[k].position.col
                                 && light_pieces[k].dark != cul) {
                             playAgain=(doubleMove(light_pieces, rn+1, cn-1, rn+2, cn-2)||
-                                    doubleMove(light_pieces, rn+1, cn+1, rn+2, cn+2));
+                                    doubleMove(light_pieces, rn+1, cn+1, rn+2, cn+2))||
+                                    (board_get_piece_at(rn-2, cn+2).crowned&&(
+                                            doubleMove(light_pieces, rn+1, cn+1, rn+2, cn+2)||
+                                                    doubleMove(light_pieces, rn+1, cn-1, rn+2, cn-2)||
+                                                    doubleMove(light_pieces,rn-1, cn-1, rn-2, cn-2 )));
                             light_pieces[k] = none_piece;
                             light_pieces[k].position.row = -1;
                             light_pieces[k].position.col = -1;
@@ -230,7 +256,11 @@ public class DraughtsBoard {
                         if (rn - 1 == dark_pieces[k].position.row && cn - 1 == dark_pieces[k].position.col
                                 && dark_pieces[k].dark != cul) {
                             playAgain=doubleMove(dark_pieces, rn+1, cn+1, rn+2, cn+2)||
-                                    doubleMove(dark_pieces, rn+1, cn-1, rn+2, cn-2);
+                                    doubleMove(dark_pieces, rn+1, cn-1, rn+2, cn-2)||
+                                    (board_get_piece_at(rn-2, cn-2).crowned&&(
+                                            doubleMove(dark_pieces,rn-1, cn+1, rn-2, cn+2 )||
+                                                    doubleMove(dark_pieces, rn+1, cn+1, rn+2, cn+2)||
+                                                    doubleMove(dark_pieces, rn+1, cn-1, rn+2, cn-2)));
                             dark_pieces[k] = none_piece;
                             dark_pieces[k].position.row = -1;
                             dark_pieces[k].position.col = -1;
@@ -241,7 +271,11 @@ public class DraughtsBoard {
                         if (rn - 1 == light_pieces[k].position.row && cn - 1 == light_pieces[k].position.col
                                 && light_pieces[k].dark != cul) {
                             playAgain=(doubleMove(light_pieces, rn+1, cn+1, rn+2, cn+2)||
-                                    doubleMove(light_pieces, rn+1, cn-1, rn+2, cn-2));
+                                    doubleMove(light_pieces, rn+1, cn-1, rn+2, cn-2))||
+                                    (board_get_piece_at(rn-2, cn-2).crowned&&(
+                                            doubleMove(light_pieces, rn+1, cn+1, rn+2, cn+2)||
+                                                    doubleMove(light_pieces, rn+1, cn-1, rn+2, cn-2)||
+                                                    doubleMove(light_pieces,rn-1, cn+1, rn-2, cn+2 )));
                             light_pieces[k] = none_piece;
                             light_pieces[k].position.row = -1;
                             light_pieces[k].position.col = -1;
@@ -322,7 +356,15 @@ public class DraughtsBoard {
             win = 1;
         }
 
+        //Count players remaining piece
+        playerOnePieceCount=12-count_light_dead;
+        playerTwoPieceCount=12-count_dark_dead;
+
         return win;
+    }
+
+    public String playersPiece(){
+        return playerOnePieceCount+","+playerTwoPieceCount;
     }
 
     private int validate(DraughtsMove dm) {
