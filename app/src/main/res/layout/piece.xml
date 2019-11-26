@@ -6,5 +6,6 @@
     android:layout_height="wrap_content"
     android:scaleType="centerCrop"
     android:padding="@dimen/small"
+    android:onClick="piece_pressed"
     android:contentDescription="@string/contain_piece"
     android:src="@drawable/player_one_piece" />
