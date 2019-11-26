@@ -1,4 +1,12 @@
 <resources>
     <string name="app_name">Draughts Game</string>
     <string name="action_settings">Settings</string>
+    <string name="contain_piece">contain piece</string>
+
+
+    <!--SharedPreferences  keys-->
+    <string name="player_one_piece_key">PLAYER_ONE_PIECE</string>
+    <string name="player_two_piece_key">PLAYER_TWO_PIECE</string>
+    <string name="game_cell_key">GAME_CELL</string>
+    <string name="prelim_cell_key">PRELIM_CELL</string>
 </resources>

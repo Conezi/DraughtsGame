@@ -1,25 +1,25 @@
 package com.assignment.draughtsgame.activities;
 
 import android.os.Bundle;
+import android.widget.GridView;
 
 import com.assignment.draughtsgame.R;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
+import com.assignment.draughtsgame.adapters.PieceAdapter;
+import com.assignment.draughtsgame.utils.DraughtsBoard;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
-import android.view.View;
-import android.view.Menu;
-import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity {
 
+    private GridView gridView;
+    DraughtsBoard draughtsBoard=new DraughtsBoard();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
-
-
+        String[] myvec=draughtsBoard.vec_string();
+        gridView=findViewById(R.id.gridview);
+        gridView.setAdapter(new PieceAdapter(this, myvec));
     }
 }
