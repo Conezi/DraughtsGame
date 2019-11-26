@@ -21,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
     String click_move = "empty";
     private View previousView =null;
     private GridView gridView;
+    private String newPositionTag;
     DraughtsBoard draughtsBoard=new DraughtsBoard();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +35,24 @@ public class MainActivity extends AppCompatActivity {
 
     public void piece_pressed(View view) {
         String s = (String)view.getTag();
+        boolean doubleChance=(s.equals(newPositionTag));
+        if(draughtsBoard.playAgain){
+            if(doubleChance) {
+                clearSelection();
                 selectOrMovePiece(view, s);
+                draughtsBoard.setPlayAgain(false);
+            }else {
+                if(!click_move.equals("")){
+                    selectOrMovePiece(view, s);
+                    return;
+                }
+                draughtsBoard.setPlayAgain(false);
+                draughtsBoard.turn=draughtsBoard.turn*-1;
+                //Toast.makeText(this, "Player missed multiple capture", Toast.LENGTH_SHORT).show();
+            }
+        }else {
+            selectOrMovePiece(view,s);
+        }
     }
 
     private void selectOrMovePiece(View view, String s){
@@ -67,11 +85,16 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(this, "Invalid Move, try again!", Toast.LENGTH_SHORT).show();
                 clearSelection();
             } else {
+                newPositionTag=(String)view.getTag();
                 String[] myvec=draughtsBoard.vec_string();
                 gridView = findViewById(R.id.gridview);
                 gridView.setAdapter(new PieceAdapter(this, myvec));
                 clearSelection();
                 draughtsBoard.board_print();
+
+                if(draughtsBoard.playAgain){
+                    onViewSelected(view, s);
+                }
             }
         }
     }

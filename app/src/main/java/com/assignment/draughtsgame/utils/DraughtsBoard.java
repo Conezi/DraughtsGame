@@ -6,8 +6,13 @@ public class DraughtsBoard {
     private DraughtsPiece[] light_pieces = new DraughtsPiece[12];
     private DraughtsPiece[] dark_pieces = new DraughtsPiece[12];
     private DraughtsPiece none_piece = new DraughtsPiece();
+    private int index;
     public int turn;
+    public boolean playAgain=false;
 
+    public void setPlayAgain(boolean playAgain) {
+        this.playAgain = playAgain;
+    }
 
     public DraughtsBoard() {
         int a = 0;
@@ -65,16 +70,15 @@ public class DraughtsBoard {
     }
 
     public DraughtsPiece board_get_piece_at(int r, int c) {
-        int index;
         for (int i = 0; i < 12; i++) {
             if (light_pieces[i].position.col == c && light_pieces[i].position.row == r) {
-                index =i;
+                index=i;
                 return light_pieces[i];
             }
         }
         for (int i = 0; i < 12; i++) {
             if (dark_pieces[i].position.col == c && dark_pieces[i].position.row == r) {
-                index =i;
+                index=i;
                 return dark_pieces[i];
             }
         }
@@ -86,7 +90,7 @@ public class DraughtsBoard {
             System.out.print((8 - r) + (" "));
             for (int a = 0; a <= 7; a = a + 1) {
                 if (board_get_piece_at(r, a).position.col ==
-                        -1) {
+                        -1 || board_get_piece_at(r, a).captured) {
                     System.out.print(".");
                 } else {
                     (board_get_piece_at(r, a)).piece_print();
@@ -102,7 +106,7 @@ public class DraughtsBoard {
         for (int r = 0; r < 8; r = r + 1) {
             for (int a = 0; a < 8; a = a + 1) {
                 if (board_get_piece_at(r, a).position.col ==
-                        -1) {
+                        -1 || board_get_piece_at(r, a).captured) {
                     str[(r*8)+a] = ".";
                 } else {
                     str[(r*8)+a] = (board_get_piece_at(r, a)).toString();
@@ -129,8 +133,118 @@ public class DraughtsBoard {
             int i = 0;
             for (SimpleMove n : dm.simple_moves) {
                 n.start.row = n.start.row + 0;
+                // start and end points of this move
+                int ro = dm.simple_moves[i].start.row;
+                int co = dm.simple_moves[i].start.col;
+                int rn = dm.simple_moves[i].end.row;
+                int cn = dm.simple_moves[i].end.col;
+                // draught piece at the start point, the one which is being moved
+
+                int dir = 0;
+                // find out which direction piece went
+
+                if (rn < ro && cn > co) {
+                    dir = 0;
+                } else if (rn < ro && co > cn) {
+                    dir = 1;
+                } else if (ro < rn && co > cn) {
+                    dir = 2;
+                } else if (ro < rn && cn > co) {
+                    dir = 3;
+                }
+                // for the direction it went to, check the box diagonally behind it
+                // if it is of the other color, and was filled before, then make it
+                // into a none piece
+                if (dir == 0) {
+                    for (int k = 0; k < 12; k ++) {
+                        if (rn + 1 == dark_pieces[k].position.row && cn - 1 == dark_pieces[k].position.col
+                                && dark_pieces[k].dark != cul) {
+                            playAgain=(doubleMove(dark_pieces,rn-1, cn+1, rn-2, cn+2 )||
+                                    doubleMove(dark_pieces,rn-1, cn-1, rn-2, cn-2 ));
+                            dark_pieces[k] = none_piece;
+                            dark_pieces[k].position.row = -1;
+                            dark_pieces[k].position.col = -1;
+                        }
+                    }
+                    for (int k = 0; k < 12; k ++) {
+                        if (rn + 1 == light_pieces[k].position.row && cn - 1 == light_pieces[k].position.col
+                                && light_pieces[k].dark != cul) {
+                            playAgain=(doubleMove(light_pieces,rn-1, cn+1, rn-2, cn+2 )||
+                                    doubleMove(light_pieces,rn-1, cn-1, rn-2, cn-2 ));
+
+                            light_pieces[k] = none_piece;
+                            light_pieces[k].position.row = -1;
+                            light_pieces[k].position.col = -1;
+                        }
+                    }
+                } else if (dir == 1) {
+                    for (int k = 0; k < 12; k ++) {
+                        if (rn + 1 == dark_pieces[k].position.row && cn + 1 == dark_pieces[k].position.col
+                                && dark_pieces[k].dark != cul) {
+                            playAgain=doubleMove(dark_pieces, rn-1, cn-1, rn-2, cn-2)||
+                                    doubleMove(dark_pieces,rn-1, cn+1, rn-2, cn+2 );
+                            dark_pieces[k] = none_piece;
+                            dark_pieces[k].position.row = -1;
+                            dark_pieces[k].position.col = -1;
+                        }
+                    }
+                    for (int k = 0; k < 12; k ++) {
+                        if (rn + 1 == light_pieces[k].position.row && cn + 1 == light_pieces[k].position.col
+                                && light_pieces[k].dark != cul) {
+                            playAgain=(doubleMove(light_pieces, rn-1, cn-1, rn-2, cn-2)||
+                                    doubleMove(light_pieces,rn-1, cn+1, rn-2, cn+2 ));
+                            light_pieces[k] = none_piece;
+                            light_pieces[k].position.row = -1;
+                            light_pieces[k].position.col = -1;
+                        }
+                    }
+                } else if (dir == 2) {
+                    for (int k = 0; k < 12; k ++) {
+                        if (rn - 1 == dark_pieces[k].position.row && cn + 1 == dark_pieces[k].position.col
+                                && dark_pieces[k].dark != cul) {
+                            playAgain=doubleMove(dark_pieces, rn+1, cn-1, rn+2, cn-2)||
+                                    doubleMove(dark_pieces, rn+1, cn+1, rn+2, cn+2);
+                            dark_pieces[k] = none_piece;
+                            dark_pieces[k].position.row = -1;
+                            dark_pieces[k].position.col = -1;
+                        }
+                    }
+                    for (int k = 0; k < 12; k ++) {
+                        if (rn - 1 == light_pieces[k].position.row && cn + 1 == light_pieces[k].position.col
+                                && light_pieces[k].dark != cul) {
+                            playAgain=(doubleMove(light_pieces, rn+1, cn-1, rn+2, cn-2)||
+                                    doubleMove(light_pieces, rn+1, cn+1, rn+2, cn+2));
+                            light_pieces[k] = none_piece;
+                            light_pieces[k].position.row = -1;
+                            light_pieces[k].position.col = -1;
+                        }
+                    }
+                } else {
+                    for (int k = 0; k < 12; k ++) {
+                        if (rn - 1 == dark_pieces[k].position.row && cn - 1 == dark_pieces[k].position.col
+                                && dark_pieces[k].dark != cul) {
+                            playAgain=doubleMove(dark_pieces, rn+1, cn+1, rn+2, cn+2)||
+                                    doubleMove(dark_pieces, rn+1, cn-1, rn+2, cn-2);
+                            dark_pieces[k] = none_piece;
+                            dark_pieces[k].position.row = -1;
+                            dark_pieces[k].position.col = -1;
+                        }
+                    }
+                    for (int k = 0; k < 12; k ++) {
+                        if (rn - 1 == light_pieces[k].position.row && cn - 1 == light_pieces[k].position.col
+                                && light_pieces[k].dark != cul) {
+                            playAgain=(doubleMove(light_pieces, rn+1, cn+1, rn+2, cn+2)||
+                                    doubleMove(light_pieces, rn+1, cn-1, rn+2, cn-2));
+                            light_pieces[k] = none_piece;
+                            light_pieces[k].position.row = -1;
+                            light_pieces[k].position.col = -1;
+                        }
+                    }
+                }
                 board_move(dm);
+                if(!playAgain) {
                     turn = turn * -1;
+                }
                 i = i + 1;
             }
         } else {
@@ -139,6 +253,11 @@ public class DraughtsBoard {
         }
         return 1;
     }
+
+    private boolean doubleMove(DraughtsPiece[] pieces, int row1, int col1, int row2, int col2){
+        return (board_get_piece_at(row1, col1)==pieces[index]&&board_get_piece_at(row2, col2)==none_piece)&&(row2>=0&&row2<=7&&col2>=0&&col2<=7);
+    }
+
 
     private void board_move(DraughtsMove dm) {
         DraughtsPiece dp = new DraughtsPiece();
@@ -300,15 +419,6 @@ public class DraughtsBoard {
 
         DraughtsPosition[] pp = p.piece_positions_in_direction(dir);
         int t = 0;
-            if (!cull) {
-                if (dir == 0 || dir == 1) {
-                    return 6;
-                }
-            } else {
-                if (dir == 2 || dir == 3) {
-                    return 6;
-                }
-            }
         for (DraughtsPosition x : pp) {
             if (x.row == rn && x.col == cn) {
                 t = 1;

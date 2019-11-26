@@ -1,6 +1,7 @@
 package com.assignment.draughtsgame.utils;
 
 public class DraughtsPiece {
+    boolean captured;
     boolean dark;
     DraughtsPosition position = new DraughtsPosition();
 
@@ -27,6 +28,7 @@ public class DraughtsPiece {
     }
 
     public DraughtsPiece() {
+        captured=false;
         dark = false;
         position.row = 0;
         position.col = 0;
