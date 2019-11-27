@@ -4,8 +4,23 @@
     <color name="colorPrimaryDark">#725732</color>
     <color name="colorAccent">#3F51B5</color>
 
+
     <color name="playerOneDefaultPiece">#410101</color>
     <color name="playerTwoDefaultPiece">#030E4D</color>
     <color name="defaultGameCellColor">#FFFFFF</color>
     <color name="defaultPrelimCellColor">#000000</color>
+    <color name="bottom_sheet_translucent_color">#79000000</color>
+
+
+    <!-- More colors -->
+    <color name="yellow">#FFC107</color>
+    <color name="green">#034E0B</color>
+    <color name="brown">#362002</color>
+    <color name="blue">#2B45DA</color>
+    <color name="red">#E00707</color>
+    <color name="purple">#3D0244</color>
+    <color name="orange">#DB6904</color>
+    <color name="pink">#F5026D</color>
+    <color name="navy">#020627</color>
+    <color name="grey">#4E4E4E</color>
 </resources>

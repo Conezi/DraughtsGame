@@ -1,12 +1,22 @@
 <resources>
     <string name="app_name">Draughts Game</string>
-    <string name="action_settings">Settings</string>
-    <string name="contain_piece">contain piece</string>
+    <string name="settings_activity_title">Settings</string>
 
+    <string name="action_done">DONE</string>
+    <string name="contain_piece">contain piece</string>
+    <string name="player_one_s_piece">Player One\'s Piece:</string>
+    <string name="player_two_s_piece">Player Two\'s Piece:</string>
+    <string name="piece">12</string>
+    <string name="player_one_s_turn">PLAYER ONE\'S TURN</string>
+    <string name="settings">SETTINGS</string>
+    <string name="reset">RESET</string>
 
     <!--SharedPreferences  keys-->
     <string name="player_one_piece_key">PLAYER_ONE_PIECE</string>
     <string name="player_two_piece_key">PLAYER_TWO_PIECE</string>
     <string name="game_cell_key">GAME_CELL</string>
     <string name="prelim_cell_key">PRELIM_CELL</string>
+    <string name="board_color">Board Color</string>
+    <string name="player_one_piece">Player One Piece</string>
+    <string name="player_two_piece">Player Two Piece</string>
 </resources>
